@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using API.Dtos;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -129,6 +130,32 @@ namespace API.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+        [Authorize]
+        [HttpGet("user-detail")]
+        public async Task<ActionResult<UserDetailDto>> GetUserDetail()
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManger.FindByIdAsync(currentUserId!);
+            if (user is null)
+            {
+                return NotFound(new AuthResponeDto
+                {
+                    IsSuccess = false,
+                    Message = "User not found"
+                });
+            }
+            return Ok(new UserDetailDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Roles = [.. await _userManger.GetRolesAsync(user)],
+                FullName = user.FullName,
+                PhoneNumberComfirmed = user.PhoneNumberConfirmed,
+                TowFacotrEnable = user.TwoFactorEnabled,
+                AccessFailedCount = user.AccessFailedCount,
+            });
         }
     }
 }
