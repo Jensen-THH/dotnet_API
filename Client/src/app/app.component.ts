@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './layout/navbar/navbar.component';
-import { initFlowbite } from 'flowbite';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -13,6 +12,5 @@ import { initFlowbite } from 'flowbite';
 export class AppComponent implements OnInit {
   title = 'Client';
   ngOnInit(): void {
-    initFlowbite();
   }
 }
