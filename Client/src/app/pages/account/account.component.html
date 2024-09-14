@@ -1,0 +1,63 @@
+<div class="container mx-auto p-6">
+  <h4 class="text-3xl font-bold mb-6 text-gray-800">Account Information</h4>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading$ | async" class="flex justify-center items-center py-8">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+  </div>
+
+  <!-- User Details -->
+  <ng-container *ngIf="userDetail$ | async as userDetail">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <!-- Header with gradient background -->
+      <div class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 p-6">
+        <div class="flex items-center">
+          <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-3xl font-bold text-blue-500 mr-6 shadow-lg">
+            {{ userDetail.fullName.charAt(0) }}
+          </div>
+          <div>
+            <p class="text-2xl font-semibold text-white">{{ userDetail.fullName }}</p>
+            <p class="text-lg text-blue-100">{{ userDetail.email }}</p>
+            <p class="text-md text-blue-200">{{ userDetail.phoneNumber || 'No phone number provided' }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- User details content -->
+      <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <p class="text-sm font-medium text-gray-500">ID</p>
+            <p class="text-base font-semibold text-gray-900">{{ userDetail.id }}</p>
+          </div>
+          <div class="space-y-2">
+            <p class="text-sm font-medium text-gray-500">Roles</p>
+            <div class="flex flex-wrap gap-2">
+              <span *ngFor="let role of userDetail.roles"
+                    class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                {{ role }}
+              </span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <p class="text-sm font-medium text-gray-500">2FA Status</p>
+            <p class="text-base font-semibold" [ngClass]="getFieldClass(userDetail.towFacotrEnable)">
+              {{ userDetail.towFacotrEnable ? 'Enabled' : 'Disabled' }}
+            </p>
+          </div>
+         
+          <div class="space-y-2">
+            <p class="text-sm font-medium text-gray-500">Phone Number Confirmed</p>
+            <p class="text-base font-semibold" [ngClass]="getFieldClass(userDetail.phoneNumberConfirmed)">
+              {{ userDetail.phoneNumberConfirmed ? 'Yes' : 'No' }}
+            </p>
+          </div>
+          <div class="space-y-2">
+            <p class="text-sm font-medium text-gray-500">Access Failed Count</p>
+            <p class="text-base font-semibold text-gray-900">{{ userDetail.accessFailedCount }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
