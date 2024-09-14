@@ -1,53 +1,101 @@
-<nav class="bg-gray-800 p-4">
-    <div class="container mx-auto flex items-center justify-between">
-        <!-- Logo -->
-        <div class="text-white text-2xl font-bold">
-            <a href="/">Client</a>
+<nav class="bg-gray-900 text-white shadow-lg">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href="/" class="flex items-center space-x-2">
+          <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <span class="font-bold text-xl">Caro System</span>
+        </a>
+      </div>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline space-x-4">
+          @if (isLoggedIn()) {
+            <a href="/" class="nav-link">Home</a>
+            <a href="/services" class="nav-link">Services</a>
+            <a href="/users" class="nav-link">Users</a>
+          }
+          @else {
+            <a href="/login" class="nav-link">Login</a>
+            <a href="/register" class="nav-link">Register</a>
+          }
         </div>
+      </div>
 
-        <!-- Navbar Links -->
-        <div class="hidden md:flex space-x-4">
-            <ng-container *ngIf="isLoggedIn;">
-                <a href="/" class="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                <a href="/services"
-                    class="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Services</a>
-            </ng-container>
-
-            <!-- Conditional Links -->
-            <ng-container *ngIf="!isLoggedIn; else loggedInTemplate">
-                <a href="/login" class="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Login</a>
-                <a href="/register"
-                    class="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Register</a>
-            </ng-container>
-
-            <ng-template #loggedInTemplate>
-                <!-- Profile Dropdown -->
-                <div class="relative">
-                    <button (click)="toggleProfileMenu()"
-                        class="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                        Profile
-                    </button>
-                    <div *ngIf="showProfileMenu"
-                        class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md ring-1 ring-black ring-opacity-5">
-                        <div class="py-1">
-                            <a href="/profile"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                            <a href="/settings"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                            <button (click)="logout()"
-                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
-                        </div>
-                    </div>
-                </div>
-            </ng-template>
+      <!-- User Profile -->
+      @if (isLoggedIn()) {
+        <div class="hidden md:block">
+          <div class="ml-4 flex items-center md:ml-6">
+            <div class="relative" *ngIf="getUserDetail() as user">
+              <button (click)="toggleProfileMenu()" class="profile-button flex items-center max-w-xs bg-gray-800 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                <img *ngIf="user?.avatar; else defaultAvatar" [src]="user.avatar" alt="User Avatar" class="h-8 w-8 rounded-full">
+                <ng-template #defaultAvatar>
+                  <span class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium">
+                    {{user?.name?.charAt(0) | uppercase}}
+                  </span>
+                </ng-template>
+              </button>
+              <div *ngIf="showProfileMenu" class="profile-menu origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <a href="/account" class="profile-menu-item">Profile</a>
+                <a href="/" class="profile-menu-item">Settings</a>
+                <button (click)="logout()" class="profile-menu-item w-full text-left">Logout</button>
+              </div>
+            </div>
+          </div>
         </div>
+      }
 
-        <!-- Mobile Menu Button -->
-        <div class="md:hidden flex items-center">
-            <button (click)="toggleProfileMenu()"
-                class="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                Menu
-            </button>
-        </div>
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button (click)="toggleMobileMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+          <svg class="h-6 w-6" [ngClass]="{'hidden': showMobileMenu, 'block': !showMobileMenu}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg class="h-6 w-6" [ngClass]="{'block': showMobileMenu, 'hidden': !showMobileMenu}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
     </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div [ngClass]="{'block': showMobileMenu, 'hidden': !showMobileMenu}" class="md:hidden">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+      @if (isLoggedIn()) {
+        <a href="/" class="mobile-nav-link">Home</a>
+        <a href="/services" class="mobile-nav-link">Services</a>
+        <a href="/users" class="mobile-nav-link">Users</a>
+      }
+      @else {
+        <a href="/login" class="mobile-nav-link">Login</a>
+        <a href="/register" class="mobile-nav-link">Register</a>
+      }
+    </div>
+    @if (isLoggedIn()) {
+      <div class="pt-4 pb-3 border-t border-gray-700">
+        <div class="flex items-center px-5">
+          <div class="flex-shrink-0">
+            <img *ngIf="getUserDetail()?.avatar; else mobileDefaultAvatar" [src]="getUserDetail()?.avatar" alt="User Avatar" class="h-10 w-10 rounded-full">
+            <ng-template #mobileDefaultAvatar>
+              <span class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium">
+                {{getUserDetail()?.name?.charAt(0) | uppercase}}
+              </span>
+            </ng-template>
+          </div>
+          <div class="ml-3">
+            <div class="text-base font-medium leading-none text-white">{{getUserDetail()?.name}}</div>
+            <div class="text-sm font-medium leading-none text-gray-400">{{getUserDetail()?.role}}</div>
+          </div>
+        </div>
+        <div class="mt-3 px-2 space-y-1">
+          <a href="/account" class="mobile-nav-link">Profile</a>
+          <a href="/" class="mobile-nav-link">Settings</a>
+          <button (click)="logout()" class="mobile-nav-link w-full text-left">Logout</button>
+        </div>
+      </div>
+    }
+  </div>
 </nav>

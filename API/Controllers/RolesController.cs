@@ -40,7 +40,6 @@ namespace API.Controllers
             }
             return BadRequest("Role creation failed");
         }
-
         [HttpGet("GetRole")]
         public async Task<ActionResult<IEnumerable<RoleResponseDto>>> GetRole()
         {
@@ -52,6 +51,16 @@ namespace API.Controllers
             }).ToListAsync();
 
             return Ok(roles);
+        }
+        
+        [AllowAnonymous]
+        [HttpGet("GetRoleListName")]
+        public async Task<ActionResult<IEnumerable<string>>> GetRoleListName()
+        {
+            var roleNames = await _roleManager.Roles
+                .Select(r => r.Name)
+                .ToListAsync();
+            return Ok(roleNames);
         }
         [HttpDelete("DeleteRole/{id}")]
         public async Task<IActionResult> DeleteRole(string id)

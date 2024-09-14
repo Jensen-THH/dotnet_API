@@ -1,0 +1,72 @@
+:host {
+  display: contents;
+}
+
+.user-popup {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  max-width: 28rem;
+  width: 100%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.user-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.user-popup-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1a202c;
+}
+
+.user-popup-close {
+  color: #a0aec0;
+  transition: color 0.15s;
+}
+
+.user-popup-close:hover {
+  color: #718096;
+}
+
+.user-popup-content {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1rem;
+}
+
+.user-popup-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 0.75rem;
+}
+
+.user-popup-detail {
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.user-popup-label {
+  font-weight: 500;
+  color: #718096;
+}
+
+.user-popup-value {
+  color: #2d3748;
+}
+
+.user-popup-status-green {
+  color: #38a169;
+}
+
+.user-popup-status-red {
+  color: #e53e3e;
+}
+
+.user-popup-status-yellow {
+  color: #d69e2e;
+}
