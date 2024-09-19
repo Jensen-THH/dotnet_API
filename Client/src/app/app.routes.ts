@@ -6,6 +6,7 @@ import { AccountComponent } from './pages/account/account.component';
 import { authGuard } from './guard/auth.guard';
 import { UsersComponent } from './pages/users/users.component';
 import { ServicesComponent } from './pages/services/services.component';
+import { RolesComponent } from './pages/roles/roles.component';
 
 export const routes: Routes = [
     {
@@ -32,6 +33,11 @@ export const routes: Routes = [
     {
         path: 'account',
         component: AccountComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'roles',
+        component: RolesComponent,
         canActivate: [authGuard]
     },
     {
