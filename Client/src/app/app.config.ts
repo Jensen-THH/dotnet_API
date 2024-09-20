@@ -7,9 +7,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { TokenInterceptor } from '../shared/interceptors/token.interceptor';
 import { InjectionToken } from '@angular/core';
 import { environment } from '../environments/environment';
-import { API_BASE_URL } from '../shared/service-proxies/temp/service-proxies';
-
-export const REMOTE_BASE_URL = new InjectionToken<string>('REMOTE_BASE_URL');
+import { REMOTE_BASE_URL } from '../shared/service-proxies/remote-service-proxies';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([TokenInterceptor])),
     {
-      provide: API_BASE_URL,
+      provide: REMOTE_BASE_URL,
       useValue: environment.REMOTE_BASE_URL
     },
   ]
