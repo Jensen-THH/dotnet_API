@@ -6,12 +6,14 @@ import { AccountComponent } from './pages/account/account.component';
 import { authGuard } from './guard/auth.guard';
 import { UsersComponent } from './pages/users/users.component';
 import { ServicesComponent } from './pages/services/services.component';
+import { RolesComponent } from './pages/roles/roles.component';
+import { CalendarComponent } from './pages/calendar/calendar.component';
 
 export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: "home"
+        redirectTo: "calendar"
     },
     {
         path: 'login',
@@ -35,9 +37,18 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        path: 'roles',
+        component: RolesComponent,
+        canActivate: [authGuard]
+    },
+    {
         path: 'services',
         component: ServicesComponent,
         canActivate: [authGuard]
+    },
+    {
+        path: 'calendar',
+        component: CalendarComponent,
     },
     {
         path: "**",

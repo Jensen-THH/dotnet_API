@@ -1,0 +1,110 @@
+<div class="calendar-actions flex justify-between items-center mb-2">
+  <button (click)="exportData()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Export
+    Calendar Data</button>
+  <input type="file" (change)="importData($event)" accept=".json"
+    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" />
+</div>
+<div class="calendar-grid">
+  <div *ngFor="let day of days; let i = index" [ngClass]="{
+         'calendar-day': true,
+         'current-day': isToday(day.date),
+         'past-day': isPast(day.date)
+       }" class="relative transition-transform transform">
+    <div class="date-header flex justify-between items-center">
+      <span class="font-semibold text-lg">{{ i + 1 }}. {{ day.formattedDate }}</span>
+      <button *ngIf="isToday(day.date) || isPast(day.date)" (click)="toggleMark(i)" class="focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          [ngClass]="day.marked ? 'text-green-500' : 'text-gray-500'">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12l5 5L20 7" />
+        </svg>
+      </button>
+    </div>
+    <textarea [(ngModel)]="day.note" (ngModelChange)="saveNote(i, $event)" placeholder="Add note..."
+      class="mt-2 p-2 border rounded-md w-full h-20 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+      (input)="adjustHeight($event)"></textarea>
+
+    <!-- Vocabulary Input -->
+    <div class="mt-2 flex justify-between">
+      <div class="flex justify-between">
+        <button (click)="addVocabulary(i)"
+          class="mt-2 mr-1 px-4 py-2 bg-blue-500 text-white rounded inline-flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          <span class="text-sm">Add Vocabulary</span>
+        </button>
+
+        <button *ngIf="day?.vocabulary?.length != 0" (click)="removeAllVocabulary(i)"
+          class="mt-2 px-4 py-2 bg-red-500 inline-flex items-center text-white rounded">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 7l-5 5m-5-5v-2a2 2 0 00-2 2H5a2 2 0 00-2 2v3a2 2 0 002 2h11a2 2 0 002-2v-3a2 2 0 00-2-2m-1-1a2 2 0 012-2h2a2 2 0 012 2m-3-3a2 2 0 012-2v3" />
+          </svg>
+          <span class="text-sm">Delete all</span>
+        </button>
+      </div>
+
+      <button *ngIf="day?.vocabulary?.length != 0" (click)="toggleCollapse(i)"
+        class="mt-2 px-4 py-2 bg-gray-500 text-white rounded inline-flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 16l-4-4h8l-4 4zm0-8l4 4H8l4-4z" />
+        </svg>
+        <span class="text-sm">{{ day?.isCollapsed ? 'Expand' : 'Collapse' }}</span>
+      </button>
+
+
+
+      <div *ngIf="day?.errorMessage" class="mt-2 text-red-600">{{ day.errorMessage }}</div>
+    </div>
+    <div class="flex justify-between">
+      <button *ngIf="day?.vocabulary?.length != 0"
+        (click)="isSpeaking ? pauseOrStop('stop') : speakAllVocabularyWithTimeSleep(i)"
+        class="mt-2 px-4 py-2 bg-gray-500 text-white rounded inline-flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            [attr.d]="isSpeaking ? 'M6 18L18 6M6 6l12 12' : 'M12 16l-4-4h8l-4 4zm0-8l4 4H8l4-4z'" />
+        </svg>
+        <span class="text-sm">{{ isSpeaking ? 'Stop' : 'Speaker all' }}</span>
+      </button>
+    </div>
+
+
+    <ng-template [ngIf]="!day?.isCollapsed">
+      <div class="mt-2 grid grid-cols-1 gap-2">
+        <div *ngFor="let vocab of day?.vocabulary; let j = index"
+          class="flex items-center justify-between shadow-md mb-2 rounded-md p-2 bg-slate-50">
+          <span class="font-semibold">{{ vocab.key }}: <span class="text-gray-500">{{ vocab.meaning }}</span></span>
+          <div class="flex justify-around">
+            <button (click)="removeVocabulary(i, j)"
+              class="px-2 py-1 bg-red-500 text-white rounded-full mr-2 opacity-0 hover:opacity-100 transition-opacity duration-200">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <button (click)="editVocabulary(i, j)"
+              class="px-2 py-1 bg-yellow-500 text-white rounded-full opacity-0 hover:opacity-100 transition-opacity duration-200">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-4.5m18 0a2.5 2.5 0 103.536-3.536L21.036 3.5h-4.5m-2.036 5.036H6.5" />
+              </svg>
+            </button>
+          </div>
+          <button (click)="speakVocabulary(i, j)" class="px-2 py-1 bg-blue-500 text-white rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M11 5l-7 7h4v6h6v-6h4l-7-7zm9 0l2 2m0 0l-2 2m2-2a6 6 0 010 8m0 0l-2-2m2 2l2 2" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

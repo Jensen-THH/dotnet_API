@@ -1,0 +1,18 @@
+ <!-- Role List -->
+    <!-- Loading indicator -->
+    <div *ngIf="loading$ | async" class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-indigo-600"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let role of roles$ | async"
+            class="bg-gray-100 rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105">
+            <div class="p-6">
+                <h5 class="text-2xl font-semibold mb-2 text-indigo-600">{{ role.name }}</h5>
+                <p class="text-gray-700 mb-4">Total Users: <span class="font-bold">{{ role.totalUsers }}</span></p>
+                <button (click)="deleteRole(role.id)"
+                    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200">
+                    Delete Role
+                </button>
+            </div>
+        </div>
+    </div>

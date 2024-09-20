@@ -15,7 +15,9 @@
           @if (isLoggedIn()) {
             <a href="/" class="nav-link">Home</a>
             <a href="/services" class="nav-link">Services</a>
+            <a href="/calendar" class="nav-link">Calendar</a>
             <a href="/users" class="nav-link">Users</a>
+            <a href="/roles" class="nav-link">Roles</a>
           }
           @else {
             <a href="/login" class="nav-link">Login</a>
@@ -67,7 +69,9 @@
       @if (isLoggedIn()) {
         <a href="/" class="mobile-nav-link">Home</a>
         <a href="/services" class="mobile-nav-link">Services</a>
+        <a href="/calendar" class="mobile-nav-link">Calendar</a>
         <a href="/users" class="mobile-nav-link">Users</a>
+        <a href="/roles" class="mobile-nav-link">Roles</a>
       }
       @else {
         <a href="/login" class="mobile-nav-link">Login</a>

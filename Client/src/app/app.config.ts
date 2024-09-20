@@ -4,13 +4,20 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { TokenInterceptor } from './services/token.interceptor';
+import { TokenInterceptor } from '../shared/interceptors/token.interceptor';
+import { InjectionToken } from '@angular/core';
+import { environment } from '../environments/environment';
+import { REMOTE_BASE_URL } from '../shared/service-proxies/remote-service-proxies';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes), 
+    provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([TokenInterceptor]))
+    provideHttpClient(withInterceptors([TokenInterceptor])),
+    {
+      provide: REMOTE_BASE_URL,
+      useValue: environment.REMOTE_BASE_URL
+    },
   ]
 };

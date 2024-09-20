@@ -46,9 +46,8 @@ export class RegisterComponent {
       roles: [[], Validators.required] // Roles will be an array
     }, { validators: this.passwordsMatchValidator });
 
-    this.rolesService.getAllRoles().subscribe((res)=> {
+    this.rolesService.getAllRolesName().subscribe((res)=> {
       this.availableRoles = res || [];
-      console.log(this.availableRoles);
     })
   }
 

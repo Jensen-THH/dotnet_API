@@ -11,9 +11,15 @@ export class RoleService {
   apiUrl: string = environment.hostApiUrl;
   constructor() { }
 
-  getAllRoles(): Observable<any> {
+  getAllRolesName(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/Roles/GetRoleListName`);
   }
 
-
+  getAllRoles(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/Roles/GetRole`);
+  }
+  // DELETE /api/Roles/DeleteRole/{id}
+  deleteRole(): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/Roles/DeleteRole`)
+  }
 }
