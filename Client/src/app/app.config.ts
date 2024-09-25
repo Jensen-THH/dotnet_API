@@ -8,7 +8,7 @@ import { TokenInterceptor } from '../shared/interceptors/token.interceptor';
 import { InjectionToken } from '@angular/core';
 import { environment } from '../environments/environment';
 import { REMOTE_BASE_URL } from '../shared/service-proxies/remote-service-proxies';
-
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -19,5 +19,6 @@ export const appConfig: ApplicationConfig = {
       provide: REMOTE_BASE_URL,
       useValue: environment.REMOTE_BASE_URL
     },
+    { provide: LocationStrategy, useClass: HashLocationStrategy }
   ]
 };
